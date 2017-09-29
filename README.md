@@ -61,7 +61,7 @@ pyplot.imshow(helper.images_square_grid(mnist_images, 'L'), cmap='gray')
 
 
 
-    <matplotlib.image.AxesImage at 0x7f7a082ec198>
+    <matplotlib.image.AxesImage at 0x1a92bd3d3c8>
 
 
 
@@ -86,7 +86,7 @@ pyplot.imshow(helper.images_square_grid(mnist_images, 'RGB'))
 
 
 
-    <matplotlib.image.AxesImage at 0x7f7a05169ef0>
+    <matplotlib.image.AxesImage at 0x1a92bde5eb8>
 
 
 
@@ -130,10 +130,10 @@ else:
     print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
 ```
 
-    TensorFlow Version: 1.3.0
+    TensorFlow Version: 1.2.1
 
 
-    /home/aladim/anaconda3/envs/dlnd-tf-lab/lib/python3.5/site-packages/ipykernel/__main__.py:14: UserWarning: No GPU found. Please use a GPU to train your neural network.
+    C:\Users\Kurosaki-X\Anaconda3\envs\dlnd-tf-lab\lib\site-packages\ipykernel\__main__.py:14: UserWarning: No GPU found. Please use a GPU to train your neural network.
 
 
 ### Input
@@ -185,19 +185,23 @@ def discriminator(images, reuse=False, alpha=0.2):
     :param reuse: Boolean if the weights should be reused
     :return: Tuple of (tensor output of the discriminator, tensor logits of the discriminator)
     """
+    #https://medium.com/towards-data-science/gan-by-example-using-keras-on-tensorflow-backend-1a6d515a60d0
     with tf.variable_scope("discriminator", reuse=reuse):
         out1 = tf.layers.conv2d(images, 64, 5, strides=2, padding='SAME')
         relu1 = tf.maximum(alpha * out1, out1)
+        drop1 = tf.layers.dropout(relu1, rate=0.4)
         
-        out2 = tf.layers.conv2d(relu1, 128, 5, strides=2, padding='VALID')
+        out2 = tf.layers.conv2d(drop1, 128, 5, strides=2, padding='SAME')
         norm2 = tf.layers.batch_normalization(out2, training=True)
         relu2 = tf.maximum(alpha * norm2, norm2)
+        drop2 = tf.layers.dropout(relu2, rate=0.4)
         
-        out3 = tf.layers.conv2d(relu2, 256, 5, strides=2, padding='SAME')
+        out3 = tf.layers.conv2d(drop2, 256, 5, strides=2, padding='SAME')
         norm3 = tf.layers.batch_normalization(out3, training=True)
         relu3 = tf.maximum(alpha * norm3, norm3)
+        drop3 = tf.layers.dropout(relu3, rate=0.4)
         
-        flat = tf.reshape(relu3, (-1, 4*4*256))
+        flat = tf.reshape(drop3, (-1, 4*4*256))
         logits = tf.layers.dense(flat, 1)
         output = tf.sigmoid(logits)
 
@@ -226,25 +230,26 @@ def generator(z, out_channel_dim, is_train=True, alpha=0.2):
     :param is_train: Boolean if generator is being used for training
     :return: The tensor output of the generator
     """
+    #https://medium.com/towards-data-science/gan-by-example-using-keras-on-tensorflow-backend-1a6d515a60d0
     reuse = not is_train
     
     with tf.variable_scope("generator", reuse=reuse):
-        out1 = tf.layers.dense(z, 4*4*512)
+        out1 = tf.layers.dense(z, 7*7*512)
         
-        out1 = tf.reshape(out1, (-1, 4, 4, 512))
-        norm1 = tf.layers.batch_normalization(out1, training=is_train)
+        out1 = tf.reshape(out1, (-1, 7, 7, 512))
+        norm1 = tf.layers.batch_normalization(out1, training=is_train, momentum=0.9)
         relu1 = tf.maximum(alpha * norm1, norm1)
+        drop1 = tf.layers.dropout(relu1)
         
-        out2 = tf.layers.conv2d_transpose(relu1, 256, 5, strides=2, padding='SAME')
-        norm2 = tf.layers.batch_normalization(out2, training=is_train)
+        out2 = tf.layers.conv2d_transpose(drop1, 256, 5, strides=2, padding='SAME')
+        norm2 = tf.layers.batch_normalization(out2, training=is_train, momentum=0.9)
         relu2 = tf.maximum(alpha * norm2, norm2)
 
-        out3 = tf.layers.conv2d_transpose(relu2, 128, 7, strides=1, padding='VALID')
-        norm3 = tf.layers.batch_normalization(out3, training=is_train)
+        out3 = tf.layers.conv2d_transpose(relu2, 128, 5, strides=2, padding='SAME')
+        norm3 = tf.layers.batch_normalization(out3, training=is_train, momentum=0.9)
         relu3 = tf.maximum(alpha * norm3, norm3)
         
-        logits = tf.layers.conv2d_transpose(relu3, out_channel_dim, 5, strides=2, padding='SAME')
-        
+        logits = tf.layers.conv2d_transpose(relu3, out_channel_dim, 5, strides=1, padding='SAME')
         output = tf.tanh(logits)
         
     return output
@@ -280,7 +285,7 @@ def model_loss(input_real, input_z, out_channel_dim):
     dis_model_fake, dis_logits_fake = discriminator(ger_model, reuse=True)
     
     dis_loss_real = tf.reduce_mean(
-        tf.nn.sigmoid_cross_entropy_with_logits(logits=dis_logits_real, labels=tf.ones_like(dis_model_real)))
+        tf.nn.sigmoid_cross_entropy_with_logits(logits=dis_logits_real, labels=tf.ones_like(dis_model_real) * 0.9))
     dis_loss_fake = tf.reduce_mean(
         tf.nn.sigmoid_cross_entropy_with_logits(logits=dis_logits_fake, labels=tf.zeros_like(dis_model_fake)))
     ger_loss = tf.reduce_mean(
@@ -314,11 +319,12 @@ def model_opt(d_loss, g_loss, learning_rate, beta1):
     :param beta1: The exponential decay rate for the 1st moment in the optimizer
     :return: A tuple of (discriminator training operation, generator training operation)
     """
-    train_vars = tf.trainable_variables()
-    dis_vars = train_vars[:len(train_vars)//2]
-    ger_vars = train_vars[len(train_vars)//2:]
-    
     with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
+        train_vars = tf.trainable_variables()
+        
+        dis_vars = [var for var in train_vars if var.name.startswith("discriminator")]
+        ger_vars = [var for var in train_vars if var.name.startswith("generator")]
+
         dis_train = tf.train.AdamOptimizer(learning_rate, beta1=beta1).minimize(d_loss, var_list=dis_vars)
         ger_train = tf.train.AdamOptimizer(learning_rate, beta1=beta1).minimize(g_loss, var_list=ger_vars)
         
@@ -395,8 +401,6 @@ def train(epoch_count, batch_size, z_dim, learning_rate, beta1, get_batches, dat
     d_loss, g_loss = model_loss(real_input, z_input, output_channel_dim)
     dis_train, ger_train = model_opt(d_loss, g_loss, learning_rate, beta1)
     
-    sample_z = np.random.uniform(-1, 1, size=(64, z_dim))
-    
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         for epoch_i in range(epoch_count):
@@ -415,8 +419,6 @@ def train(epoch_count, batch_size, z_dim, learning_rate, beta1, get_batches, dat
                           "Generator Loss: {:.4f}".format(train_loss_ger))
                 
                 if step % 100 == 0:
-                    tmp_ger = generator(z_input, output_channel_dim, is_train=False)
-                    generated_samples = sess.run(tmp_ger, feed_dict={z_input: sample_z})
                     show_generator_output(sess, 4, z_input, output_channel_dim, data_image_mode)
                     
 ```
@@ -427,9 +429,9 @@ Test your GANs architecture on MNIST.  After 2 epochs, the GANs should be able t
 
 ```python
 batch_size = 128
-z_dim = 100
-learning_rate = 0.0002
-beta1 = 0.5
+z_dim = 120
+learning_rate = 0.001
+beta1 = 0.4
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
@@ -442,33 +444,160 @@ with tf.Graph().as_default():
           mnist_dataset.shape, mnist_dataset.image_mode)
 ```
 
-    Epoch 1/2... Discriminator Loss: 0.8801... Generator Loss: 2.6620
+    Epoch 1/2... Discriminator Loss: 11.8370... Generator Loss: 0.0001
 
 
 
 ![png](output_23_1.png)
 
 
-    Epoch 1/2... Discriminator Loss: 1.6620... Generator Loss: 0.2558
-    Epoch 1/2... Discriminator Loss: 2.3263... Generator Loss: 0.1166
-    Epoch 1/2... Discriminator Loss: 3.0429... Generator Loss: 0.0552
-    Epoch 1/2... Discriminator Loss: 3.3801... Generator Loss: 0.0394
-    Epoch 1/2... Discriminator Loss: 3.7462... Generator Loss: 0.0267
-    Epoch 1/2... Discriminator Loss: 3.9864... Generator Loss: 0.0211
-    Epoch 1/2... Discriminator Loss: 4.1840... Generator Loss: 0.0172
-    Epoch 1/2... Discriminator Loss: 4.3356... Generator Loss: 0.0150
-    Epoch 1/2... Discriminator Loss: 4.4865... Generator Loss: 0.0126
-    Epoch 1/2... Discriminator Loss: 4.6795... Generator Loss: 0.0102
+    Epoch 1/2... Discriminator Loss: 0.8647... Generator Loss: 26.3647
+    Epoch 1/2... Discriminator Loss: 8.3151... Generator Loss: 0.0579
+    Epoch 1/2... Discriminator Loss: 0.9366... Generator Loss: 1.4380
+    Epoch 1/2... Discriminator Loss: 1.8322... Generator Loss: 0.3555
+    Epoch 1/2... Discriminator Loss: 0.8304... Generator Loss: 1.5236
+    Epoch 1/2... Discriminator Loss: 1.1217... Generator Loss: 0.9041
+    Epoch 1/2... Discriminator Loss: 1.4588... Generator Loss: 3.2253
+    Epoch 1/2... Discriminator Loss: 0.8252... Generator Loss: 1.1052
+    Epoch 1/2... Discriminator Loss: 0.4212... Generator Loss: 2.8431
+    Epoch 1/2... Discriminator Loss: 0.3518... Generator Loss: 5.2515
 
 
 
 ![png](output_23_3.png)
 
 
-    Epoch 1/2... Discriminator Loss: 4.9405... Generator Loss: 0.0078
-    Epoch 1/2... Discriminator Loss: 4.8725... Generator Loss: 0.0084
-    Epoch 1/2... Discriminator Loss: 5.1662... Generator Loss: 0.0062
-    Epoch 1/2... Discriminator Loss: 5.1825... Generator Loss: 0.0061
+    Epoch 1/2... Discriminator Loss: 2.4170... Generator Loss: 7.1168
+    Epoch 1/2... Discriminator Loss: 0.8495... Generator Loss: 1.3166
+    Epoch 1/2... Discriminator Loss: 0.4462... Generator Loss: 2.5325
+    Epoch 1/2... Discriminator Loss: 0.3791... Generator Loss: 3.4950
+    Epoch 1/2... Discriminator Loss: 0.3460... Generator Loss: 6.1778
+    Epoch 1/2... Discriminator Loss: 0.3808... Generator Loss: 3.5601
+    Epoch 1/2... Discriminator Loss: 0.8963... Generator Loss: 4.8574
+    Epoch 1/2... Discriminator Loss: 0.9800... Generator Loss: 0.8076
+    Epoch 1/2... Discriminator Loss: 0.5530... Generator Loss: 2.5139
+    Epoch 1/2... Discriminator Loss: 0.5662... Generator Loss: 1.8427
+
+
+
+![png](output_23_5.png)
+
+
+    Epoch 1/2... Discriminator Loss: 0.3492... Generator Loss: 4.4839
+    Epoch 1/2... Discriminator Loss: 0.4226... Generator Loss: 2.8311
+    Epoch 1/2... Discriminator Loss: 3.1606... Generator Loss: 6.9094
+    Epoch 1/2... Discriminator Loss: 0.4218... Generator Loss: 3.0067
+    Epoch 1/2... Discriminator Loss: 0.6636... Generator Loss: 1.3708
+    Epoch 1/2... Discriminator Loss: 0.5645... Generator Loss: 1.7322
+    Epoch 1/2... Discriminator Loss: 0.4086... Generator Loss: 3.8617
+    Epoch 1/2... Discriminator Loss: 0.3928... Generator Loss: 4.2463
+    Epoch 1/2... Discriminator Loss: 0.3414... Generator Loss: 6.1110
+    Epoch 1/2... Discriminator Loss: 4.1770... Generator Loss: 0.0712
+
+
+
+![png](output_23_7.png)
+
+
+    Epoch 1/2... Discriminator Loss: 1.7765... Generator Loss: 3.1521
+    Epoch 1/2... Discriminator Loss: 1.3853... Generator Loss: 0.5703
+    Epoch 1/2... Discriminator Loss: 0.5913... Generator Loss: 2.3212
+    Epoch 1/2... Discriminator Loss: 0.5380... Generator Loss: 2.6542
+    Epoch 1/2... Discriminator Loss: 2.1109... Generator Loss: 0.2405
+    Epoch 1/2... Discriminator Loss: 0.5940... Generator Loss: 4.5775
+    Epoch 1/2... Discriminator Loss: 0.3941... Generator Loss: 4.6149
+    Epoch 1/2... Discriminator Loss: 0.4564... Generator Loss: 3.8206
+    Epoch 1/2... Discriminator Loss: 0.4259... Generator Loss: 3.3738
+    Epoch 1/2... Discriminator Loss: 1.1610... Generator Loss: 1.5208
+
+
+
+![png](output_23_9.png)
+
+
+    Epoch 1/2... Discriminator Loss: 0.4282... Generator Loss: 4.0576
+    Epoch 1/2... Discriminator Loss: 0.3708... Generator Loss: 4.3515
+    Epoch 1/2... Discriminator Loss: 0.4569... Generator Loss: 2.8301
+    Epoch 1/2... Discriminator Loss: 2.2155... Generator Loss: 0.2506
+    Epoch 1/2... Discriminator Loss: 0.6263... Generator Loss: 2.0400
+    Epoch 1/2... Discriminator Loss: 1.5072... Generator Loss: 0.6393
+    Epoch 2/2... Discriminator Loss: 1.2676... Generator Loss: 2.3847
+
+
+
+![png](output_23_11.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.9597... Generator Loss: 2.1580
+    Epoch 2/2... Discriminator Loss: 0.5653... Generator Loss: 2.3676
+    Epoch 2/2... Discriminator Loss: 0.3898... Generator Loss: 5.1062
+    Epoch 2/2... Discriminator Loss: 0.3861... Generator Loss: 4.3649
+    Epoch 2/2... Discriminator Loss: 0.4083... Generator Loss: 3.8503
+    Epoch 2/2... Discriminator Loss: 0.3727... Generator Loss: 4.7533
+    Epoch 2/2... Discriminator Loss: 0.3804... Generator Loss: 4.6765
+    Epoch 2/2... Discriminator Loss: 0.5426... Generator Loss: 3.1223
+    Epoch 2/2... Discriminator Loss: 0.3509... Generator Loss: 5.2767
+    Epoch 2/2... Discriminator Loss: 0.4217... Generator Loss: 6.9401
+
+
+
+![png](output_23_13.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.3684... Generator Loss: 4.4417
+    Epoch 2/2... Discriminator Loss: 1.9355... Generator Loss: 2.1470
+    Epoch 2/2... Discriminator Loss: 1.1147... Generator Loss: 0.8954
+    Epoch 2/2... Discriminator Loss: 1.0721... Generator Loss: 0.8797
+    Epoch 2/2... Discriminator Loss: 0.9526... Generator Loss: 2.1036
+    Epoch 2/2... Discriminator Loss: 1.1211... Generator Loss: 2.9804
+    Epoch 2/2... Discriminator Loss: 0.7303... Generator Loss: 2.9150
+    Epoch 2/2... Discriminator Loss: 0.4167... Generator Loss: 3.5916
+    Epoch 2/2... Discriminator Loss: 0.4143... Generator Loss: 4.2853
+    Epoch 2/2... Discriminator Loss: 0.3731... Generator Loss: 4.5408
+
+
+
+![png](output_23_15.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.3910... Generator Loss: 3.9159
+    Epoch 2/2... Discriminator Loss: 0.4179... Generator Loss: 3.7185
+    Epoch 2/2... Discriminator Loss: 2.8947... Generator Loss: 0.4036
+    Epoch 2/2... Discriminator Loss: 0.5240... Generator Loss: 3.9034
+    Epoch 2/2... Discriminator Loss: 0.4936... Generator Loss: 2.6303
+    Epoch 2/2... Discriminator Loss: 0.6345... Generator Loss: 1.7837
+    Epoch 2/2... Discriminator Loss: 2.0412... Generator Loss: 0.2802
+    Epoch 2/2... Discriminator Loss: 1.5294... Generator Loss: 0.4699
+    Epoch 2/2... Discriminator Loss: 1.3075... Generator Loss: 0.6295
+    Epoch 2/2... Discriminator Loss: 0.4208... Generator Loss: 3.4158
+
+
+
+![png](output_23_17.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.5323... Generator Loss: 1.9458
+    Epoch 2/2... Discriminator Loss: 0.4567... Generator Loss: 2.3985
+    Epoch 2/2... Discriminator Loss: 0.9555... Generator Loss: 0.9699
+    Epoch 2/2... Discriminator Loss: 0.8081... Generator Loss: 1.6800
+    Epoch 2/2... Discriminator Loss: 0.5114... Generator Loss: 2.3258
+    Epoch 2/2... Discriminator Loss: 0.4673... Generator Loss: 2.3078
+    Epoch 2/2... Discriminator Loss: 1.3339... Generator Loss: 0.5330
+    Epoch 2/2... Discriminator Loss: 0.4813... Generator Loss: 2.2131
+    Epoch 2/2... Discriminator Loss: 0.4486... Generator Loss: 2.4055
+    Epoch 2/2... Discriminator Loss: 1.4540... Generator Loss: 0.6321
+
+
+
+![png](output_23_19.png)
+
+
+    Epoch 2/2... Discriminator Loss: 2.6707... Generator Loss: 0.1429
+    Epoch 2/2... Discriminator Loss: 0.8888... Generator Loss: 1.0742
+    Epoch 2/2... Discriminator Loss: 1.8030... Generator Loss: 0.3188
+    Epoch 2/2... Discriminator Loss: 0.6668... Generator Loss: 3.5392
+    Epoch 2/2... Discriminator Loss: 1.7560... Generator Loss: 0.3169
+    Epoch 2/2... Discriminator Loss: 0.7312... Generator Loss: 1.4624
 
 
 ### CelebA
@@ -477,9 +606,9 @@ Run your GANs on CelebA.  It will take around 20 minutes on the average GPU to r
 
 ```python
 batch_size = 128
-z_dim = 100
-learning_rate = 0.0002
-beta1 = 0.5
+z_dim = 120
+learning_rate = 0.001
+beta1 = 0.4
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
@@ -491,6 +620,136 @@ with tf.Graph().as_default():
     train(epochs, batch_size, z_dim, learning_rate, beta1, celeba_dataset.get_batches,
           celeba_dataset.shape, celeba_dataset.image_mode)
 ```
+
+    Epoch 1/1... Discriminator Loss: 16.9941... Generator Loss: 0.0000
+
+
+
+![png](output_25_1.png)
+
+
+    Epoch 1/1... Discriminator Loss: 4.1162... Generator Loss: 0.0350
+    Epoch 1/1... Discriminator Loss: 0.5162... Generator Loss: 2.8422
+    Epoch 1/1... Discriminator Loss: 0.4747... Generator Loss: 3.1210
+    Epoch 1/1... Discriminator Loss: 1.0745... Generator Loss: 0.9649
+    Epoch 1/1... Discriminator Loss: 1.2533... Generator Loss: 3.5242
+    Epoch 1/1... Discriminator Loss: 0.8090... Generator Loss: 1.3331
+    Epoch 1/1... Discriminator Loss: 0.4544... Generator Loss: 3.6281
+    Epoch 1/1... Discriminator Loss: 0.4184... Generator Loss: 3.3658
+    Epoch 1/1... Discriminator Loss: 0.3670... Generator Loss: 8.1484
+    Epoch 1/1... Discriminator Loss: 0.4078... Generator Loss: 3.3341
+
+
+
+![png](output_25_3.png)
+
+
+    Epoch 1/1... Discriminator Loss: 0.6075... Generator Loss: 2.8589
+    Epoch 1/1... Discriminator Loss: 0.4826... Generator Loss: 2.3719
+    Epoch 1/1... Discriminator Loss: 0.5918... Generator Loss: 2.2987
+    Epoch 1/1... Discriminator Loss: 0.6381... Generator Loss: 2.7862
+    Epoch 1/1... Discriminator Loss: 0.4676... Generator Loss: 2.5488
+    Epoch 1/1... Discriminator Loss: 0.3475... Generator Loss: 6.2478
+    Epoch 1/1... Discriminator Loss: 1.0216... Generator Loss: 1.3938
+    Epoch 1/1... Discriminator Loss: 0.5664... Generator Loss: 1.8657
+    Epoch 1/1... Discriminator Loss: 0.8482... Generator Loss: 1.4416
+    Epoch 1/1... Discriminator Loss: 0.6480... Generator Loss: 1.8466
+
+
+
+![png](output_25_5.png)
+
+
+    Epoch 1/1... Discriminator Loss: 2.2491... Generator Loss: 0.2642
+    Epoch 1/1... Discriminator Loss: 0.7588... Generator Loss: 1.3423
+    Epoch 1/1... Discriminator Loss: 0.5766... Generator Loss: 3.1370
+    Epoch 1/1... Discriminator Loss: 1.9425... Generator Loss: 0.4048
+    Epoch 1/1... Discriminator Loss: 1.1857... Generator Loss: 0.9992
+    Epoch 1/1... Discriminator Loss: 1.5598... Generator Loss: 0.7427
+    Epoch 1/1... Discriminator Loss: 1.2919... Generator Loss: 1.2880
+    Epoch 1/1... Discriminator Loss: 1.3161... Generator Loss: 2.0889
+    Epoch 1/1... Discriminator Loss: 0.5954... Generator Loss: 2.0027
+    Epoch 1/1... Discriminator Loss: 0.8830... Generator Loss: 1.2181
+
+
+
+![png](output_25_7.png)
+
+
+    Epoch 1/1... Discriminator Loss: 0.5983... Generator Loss: 1.9686
+    Epoch 1/1... Discriminator Loss: 3.3128... Generator Loss: 7.1442
+    Epoch 1/1... Discriminator Loss: 0.5201... Generator Loss: 2.1857
+    Epoch 1/1... Discriminator Loss: 0.9608... Generator Loss: 1.5807
+    Epoch 1/1... Discriminator Loss: 5.2778... Generator Loss: 2.8808
+    Epoch 1/1... Discriminator Loss: 1.2259... Generator Loss: 1.0814
+    Epoch 1/1... Discriminator Loss: 1.0846... Generator Loss: 1.0706
+    Epoch 1/1... Discriminator Loss: 1.2432... Generator Loss: 1.0470
+    Epoch 1/1... Discriminator Loss: 0.9312... Generator Loss: 1.2703
+    Epoch 1/1... Discriminator Loss: 0.4814... Generator Loss: 2.8450
+
+
+
+![png](output_25_9.png)
+
+
+    Epoch 1/1... Discriminator Loss: 0.4566... Generator Loss: 3.3208
+    Epoch 1/1... Discriminator Loss: 1.4454... Generator Loss: 1.1703
+    Epoch 1/1... Discriminator Loss: 0.9391... Generator Loss: 1.4574
+    Epoch 1/1... Discriminator Loss: 0.9250... Generator Loss: 1.2871
+    Epoch 1/1... Discriminator Loss: 0.7125... Generator Loss: 1.6204
+    Epoch 1/1... Discriminator Loss: 1.1140... Generator Loss: 4.0918
+    Epoch 1/1... Discriminator Loss: 1.0832... Generator Loss: 1.2038
+    Epoch 1/1... Discriminator Loss: 0.8608... Generator Loss: 2.3076
+    Epoch 1/1... Discriminator Loss: 0.4794... Generator Loss: 2.3596
+    Epoch 1/1... Discriminator Loss: 0.4563... Generator Loss: 3.5339
+
+
+
+![png](output_25_11.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.0030... Generator Loss: 1.1396
+    Epoch 1/1... Discriminator Loss: 0.7648... Generator Loss: 2.0937
+    Epoch 1/1... Discriminator Loss: 0.4759... Generator Loss: 2.5067
+    Epoch 1/1... Discriminator Loss: 0.5335... Generator Loss: 2.1120
+    Epoch 1/1... Discriminator Loss: 0.4425... Generator Loss: 2.9939
+    Epoch 1/1... Discriminator Loss: 0.5095... Generator Loss: 3.4753
+    Epoch 1/1... Discriminator Loss: 0.5195... Generator Loss: 2.1756
+    Epoch 1/1... Discriminator Loss: 0.5305... Generator Loss: 2.6773
+    Epoch 1/1... Discriminator Loss: 0.4184... Generator Loss: 3.5996
+    Epoch 1/1... Discriminator Loss: 0.9422... Generator Loss: 2.3405
+
+
+
+![png](output_25_13.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.0512... Generator Loss: 3.3225
+    Epoch 1/1... Discriminator Loss: 0.4752... Generator Loss: 2.5340
+    Epoch 1/1... Discriminator Loss: 0.4263... Generator Loss: 3.2993
+    Epoch 1/1... Discriminator Loss: 0.4512... Generator Loss: 2.8712
+    Epoch 1/1... Discriminator Loss: 0.3626... Generator Loss: 4.7991
+    Epoch 1/1... Discriminator Loss: 1.1171... Generator Loss: 1.0248
+    Epoch 1/1... Discriminator Loss: 0.4038... Generator Loss: 3.7627
+    Epoch 1/1... Discriminator Loss: 0.3863... Generator Loss: 3.9757
+    Epoch 1/1... Discriminator Loss: 0.4133... Generator Loss: 3.2886
+    Epoch 1/1... Discriminator Loss: 0.4156... Generator Loss: 3.1933
+
+
+
+![png](output_25_15.png)
+
+
+    Epoch 1/1... Discriminator Loss: 0.3760... Generator Loss: 4.7054
+    Epoch 1/1... Discriminator Loss: 0.9805... Generator Loss: 4.1193
+    Epoch 1/1... Discriminator Loss: 0.4106... Generator Loss: 3.0476
+    Epoch 1/1... Discriminator Loss: 0.5004... Generator Loss: 2.2198
+    Epoch 1/1... Discriminator Loss: 0.3734... Generator Loss: 4.3040
+    Epoch 1/1... Discriminator Loss: 1.7771... Generator Loss: 7.0367
+    Epoch 1/1... Discriminator Loss: 1.4334... Generator Loss: 1.6699
+    Epoch 1/1... Discriminator Loss: 1.0360... Generator Loss: 1.1726
+    Epoch 1/1... Discriminator Loss: 0.5911... Generator Loss: 2.1622
+
 
 ### Submitting This Project
 When submitting this project, make sure to run all the cells before saving the notebook. Save the notebook file as "dlnd_face_generation.ipynb" and save it as a HTML file under "File" -> "Download as". Include the "helper.py" and "problem_unittests.py" files in your submission.
