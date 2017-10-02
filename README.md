@@ -61,7 +61,7 @@ pyplot.imshow(helper.images_square_grid(mnist_images, 'L'), cmap='gray')
 
 
 
-    <matplotlib.image.AxesImage at 0x1a92bd3d3c8>
+    <matplotlib.image.AxesImage at 0x7f3ecaa7fb00>
 
 
 
@@ -86,7 +86,7 @@ pyplot.imshow(helper.images_square_grid(mnist_images, 'RGB'))
 
 
 
-    <matplotlib.image.AxesImage at 0x1a92bde5eb8>
+    <matplotlib.image.AxesImage at 0x7f3ec7884cc0>
 
 
 
@@ -130,10 +130,10 @@ else:
     print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
 ```
 
-    TensorFlow Version: 1.2.1
+    TensorFlow Version: 1.3.0
 
 
-    C:\Users\Kurosaki-X\Anaconda3\envs\dlnd-tf-lab\lib\site-packages\ipykernel\__main__.py:14: UserWarning: No GPU found. Please use a GPU to train your neural network.
+    /home/aladim/anaconda3/envs/dlnd-tf-lab/lib/python3.5/site-packages/ipykernel/__main__.py:14: UserWarning: No GPU found. Please use a GPU to train your neural network.
 
 
 ### Input
@@ -418,8 +418,9 @@ def train(epoch_count, batch_size, z_dim, learning_rate, beta1, get_batches, dat
                           "Discriminator Loss: {:.4f}...".format(train_loss_dis),
                           "Generator Loss: {:.4f}".format(train_loss_ger))
                 
+                number_of_images = 16
                 if step % 100 == 0:
-                    show_generator_output(sess, 4, z_input, output_channel_dim, data_image_mode)
+                    show_generator_output(sess, number_of_images, z_input, output_channel_dim, data_image_mode)
                     
 ```
 
@@ -428,7 +429,7 @@ Test your GANs architecture on MNIST.  After 2 epochs, the GANs should be able t
 
 
 ```python
-batch_size = 128
+batch_size = 64
 z_dim = 120
 learning_rate = 0.001
 beta1 = 0.4
@@ -444,160 +445,314 @@ with tf.Graph().as_default():
           mnist_dataset.shape, mnist_dataset.image_mode)
 ```
 
-    Epoch 1/2... Discriminator Loss: 11.8370... Generator Loss: 0.0001
+    Epoch 1/2... Discriminator Loss: 18.6717... Generator Loss: 0.0000
 
 
 
 ![png](output_23_1.png)
 
 
-    Epoch 1/2... Discriminator Loss: 0.8647... Generator Loss: 26.3647
-    Epoch 1/2... Discriminator Loss: 8.3151... Generator Loss: 0.0579
-    Epoch 1/2... Discriminator Loss: 0.9366... Generator Loss: 1.4380
-    Epoch 1/2... Discriminator Loss: 1.8322... Generator Loss: 0.3555
-    Epoch 1/2... Discriminator Loss: 0.8304... Generator Loss: 1.5236
-    Epoch 1/2... Discriminator Loss: 1.1217... Generator Loss: 0.9041
-    Epoch 1/2... Discriminator Loss: 1.4588... Generator Loss: 3.2253
-    Epoch 1/2... Discriminator Loss: 0.8252... Generator Loss: 1.1052
-    Epoch 1/2... Discriminator Loss: 0.4212... Generator Loss: 2.8431
-    Epoch 1/2... Discriminator Loss: 0.3518... Generator Loss: 5.2515
+    Epoch 1/2... Discriminator Loss: 0.4182... Generator Loss: 5.4010
+    Epoch 1/2... Discriminator Loss: 0.5502... Generator Loss: 3.8693
+    Epoch 1/2... Discriminator Loss: 2.5287... Generator Loss: 0.4858
+    Epoch 1/2... Discriminator Loss: 1.8277... Generator Loss: 5.3548
+    Epoch 1/2... Discriminator Loss: 0.8926... Generator Loss: 4.6513
+    Epoch 1/2... Discriminator Loss: 0.9006... Generator Loss: 2.6375
+    Epoch 1/2... Discriminator Loss: 2.3992... Generator Loss: 0.2634
+    Epoch 1/2... Discriminator Loss: 1.0552... Generator Loss: 0.9195
+    Epoch 1/2... Discriminator Loss: 1.1696... Generator Loss: 0.7578
+    Epoch 1/2... Discriminator Loss: 0.3840... Generator Loss: 3.4520
 
 
 
 ![png](output_23_3.png)
 
 
-    Epoch 1/2... Discriminator Loss: 2.4170... Generator Loss: 7.1168
-    Epoch 1/2... Discriminator Loss: 0.8495... Generator Loss: 1.3166
-    Epoch 1/2... Discriminator Loss: 0.4462... Generator Loss: 2.5325
-    Epoch 1/2... Discriminator Loss: 0.3791... Generator Loss: 3.4950
-    Epoch 1/2... Discriminator Loss: 0.3460... Generator Loss: 6.1778
-    Epoch 1/2... Discriminator Loss: 0.3808... Generator Loss: 3.5601
-    Epoch 1/2... Discriminator Loss: 0.8963... Generator Loss: 4.8574
-    Epoch 1/2... Discriminator Loss: 0.9800... Generator Loss: 0.8076
-    Epoch 1/2... Discriminator Loss: 0.5530... Generator Loss: 2.5139
-    Epoch 1/2... Discriminator Loss: 0.5662... Generator Loss: 1.8427
+    Epoch 1/2... Discriminator Loss: 0.3599... Generator Loss: 3.9124
+    Epoch 1/2... Discriminator Loss: 0.3512... Generator Loss: 4.6893
+    Epoch 1/2... Discriminator Loss: 0.3758... Generator Loss: 3.6980
+    Epoch 1/2... Discriminator Loss: 1.8100... Generator Loss: 13.6448
+    Epoch 1/2... Discriminator Loss: 1.0764... Generator Loss: 1.9677
+    Epoch 1/2... Discriminator Loss: 0.4542... Generator Loss: 2.4665
+    Epoch 1/2... Discriminator Loss: 0.4922... Generator Loss: 2.2867
+    Epoch 1/2... Discriminator Loss: 0.4226... Generator Loss: 2.9377
+    Epoch 1/2... Discriminator Loss: 0.4306... Generator Loss: 5.9017
+    Epoch 1/2... Discriminator Loss: 1.0487... Generator Loss: 5.5744
 
 
 
 ![png](output_23_5.png)
 
 
-    Epoch 1/2... Discriminator Loss: 0.3492... Generator Loss: 4.4839
-    Epoch 1/2... Discriminator Loss: 0.4226... Generator Loss: 2.8311
-    Epoch 1/2... Discriminator Loss: 3.1606... Generator Loss: 6.9094
-    Epoch 1/2... Discriminator Loss: 0.4218... Generator Loss: 3.0067
-    Epoch 1/2... Discriminator Loss: 0.6636... Generator Loss: 1.3708
-    Epoch 1/2... Discriminator Loss: 0.5645... Generator Loss: 1.7322
-    Epoch 1/2... Discriminator Loss: 0.4086... Generator Loss: 3.8617
-    Epoch 1/2... Discriminator Loss: 0.3928... Generator Loss: 4.2463
-    Epoch 1/2... Discriminator Loss: 0.3414... Generator Loss: 6.1110
-    Epoch 1/2... Discriminator Loss: 4.1770... Generator Loss: 0.0712
+    Epoch 1/2... Discriminator Loss: 0.8089... Generator Loss: 1.7625
+    Epoch 1/2... Discriminator Loss: 0.3768... Generator Loss: 3.9536
+    Epoch 1/2... Discriminator Loss: 0.7475... Generator Loss: 1.3577
+    Epoch 1/2... Discriminator Loss: 3.8744... Generator Loss: 0.0513
+    Epoch 1/2... Discriminator Loss: 0.5434... Generator Loss: 2.2639
+    Epoch 1/2... Discriminator Loss: 0.3541... Generator Loss: 4.6484
+    Epoch 1/2... Discriminator Loss: 0.3653... Generator Loss: 3.8274
+    Epoch 1/2... Discriminator Loss: 0.3676... Generator Loss: 4.0002
+    Epoch 1/2... Discriminator Loss: 0.3420... Generator Loss: 5.6996
+    Epoch 1/2... Discriminator Loss: 0.3730... Generator Loss: 3.9811
 
 
 
 ![png](output_23_7.png)
 
 
-    Epoch 1/2... Discriminator Loss: 1.7765... Generator Loss: 3.1521
-    Epoch 1/2... Discriminator Loss: 1.3853... Generator Loss: 0.5703
-    Epoch 1/2... Discriminator Loss: 0.5913... Generator Loss: 2.3212
-    Epoch 1/2... Discriminator Loss: 0.5380... Generator Loss: 2.6542
-    Epoch 1/2... Discriminator Loss: 2.1109... Generator Loss: 0.2405
-    Epoch 1/2... Discriminator Loss: 0.5940... Generator Loss: 4.5775
-    Epoch 1/2... Discriminator Loss: 0.3941... Generator Loss: 4.6149
-    Epoch 1/2... Discriminator Loss: 0.4564... Generator Loss: 3.8206
-    Epoch 1/2... Discriminator Loss: 0.4259... Generator Loss: 3.3738
-    Epoch 1/2... Discriminator Loss: 1.1610... Generator Loss: 1.5208
+    Epoch 1/2... Discriminator Loss: 0.3602... Generator Loss: 4.3106
+    Epoch 1/2... Discriminator Loss: 0.3348... Generator Loss: 6.3144
+    Epoch 1/2... Discriminator Loss: 0.3381... Generator Loss: 5.8347
+    Epoch 1/2... Discriminator Loss: 0.4491... Generator Loss: 3.0344
+    Epoch 1/2... Discriminator Loss: 1.0345... Generator Loss: 2.4311
+    Epoch 1/2... Discriminator Loss: 0.4815... Generator Loss: 2.3211
+    Epoch 1/2... Discriminator Loss: 0.5177... Generator Loss: 2.4768
+    Epoch 1/2... Discriminator Loss: 0.4458... Generator Loss: 2.6330
+    Epoch 1/2... Discriminator Loss: 0.4242... Generator Loss: 3.3447
+    Epoch 1/2... Discriminator Loss: 0.3531... Generator Loss: 4.6426
 
 
 
 ![png](output_23_9.png)
 
 
-    Epoch 1/2... Discriminator Loss: 0.4282... Generator Loss: 4.0576
-    Epoch 1/2... Discriminator Loss: 0.3708... Generator Loss: 4.3515
-    Epoch 1/2... Discriminator Loss: 0.4569... Generator Loss: 2.8301
-    Epoch 1/2... Discriminator Loss: 2.2155... Generator Loss: 0.2506
-    Epoch 1/2... Discriminator Loss: 0.6263... Generator Loss: 2.0400
-    Epoch 1/2... Discriminator Loss: 1.5072... Generator Loss: 0.6393
-    Epoch 2/2... Discriminator Loss: 1.2676... Generator Loss: 2.3847
+    Epoch 1/2... Discriminator Loss: 0.3616... Generator Loss: 4.4722
+    Epoch 1/2... Discriminator Loss: 0.3459... Generator Loss: 4.6947
+    Epoch 1/2... Discriminator Loss: 0.5252... Generator Loss: 2.3503
+    Epoch 1/2... Discriminator Loss: 1.0485... Generator Loss: 0.9695
+    Epoch 1/2... Discriminator Loss: 0.4492... Generator Loss: 2.8366
+    Epoch 1/2... Discriminator Loss: 0.5840... Generator Loss: 2.0724
+    Epoch 1/2... Discriminator Loss: 1.4424... Generator Loss: 0.7796
+    Epoch 1/2... Discriminator Loss: 0.4100... Generator Loss: 3.2667
+    Epoch 1/2... Discriminator Loss: 0.3938... Generator Loss: 3.4847
+    Epoch 1/2... Discriminator Loss: 0.3661... Generator Loss: 4.3388
 
 
 
 ![png](output_23_11.png)
 
 
-    Epoch 2/2... Discriminator Loss: 0.9597... Generator Loss: 2.1580
-    Epoch 2/2... Discriminator Loss: 0.5653... Generator Loss: 2.3676
-    Epoch 2/2... Discriminator Loss: 0.3898... Generator Loss: 5.1062
-    Epoch 2/2... Discriminator Loss: 0.3861... Generator Loss: 4.3649
-    Epoch 2/2... Discriminator Loss: 0.4083... Generator Loss: 3.8503
-    Epoch 2/2... Discriminator Loss: 0.3727... Generator Loss: 4.7533
-    Epoch 2/2... Discriminator Loss: 0.3804... Generator Loss: 4.6765
-    Epoch 2/2... Discriminator Loss: 0.5426... Generator Loss: 3.1223
-    Epoch 2/2... Discriminator Loss: 0.3509... Generator Loss: 5.2767
-    Epoch 2/2... Discriminator Loss: 0.4217... Generator Loss: 6.9401
+    Epoch 1/2... Discriminator Loss: 0.3756... Generator Loss: 3.4295
+    Epoch 1/2... Discriminator Loss: 0.3465... Generator Loss: 5.4740
+    Epoch 1/2... Discriminator Loss: 0.4399... Generator Loss: 3.1219
+    Epoch 1/2... Discriminator Loss: 0.3598... Generator Loss: 4.8762
+    Epoch 1/2... Discriminator Loss: 0.3438... Generator Loss: 4.9415
+    Epoch 1/2... Discriminator Loss: 0.8032... Generator Loss: 1.4147
+    Epoch 1/2... Discriminator Loss: 0.5313... Generator Loss: 2.0023
+    Epoch 1/2... Discriminator Loss: 0.8670... Generator Loss: 1.2045
+    Epoch 1/2... Discriminator Loss: 0.3639... Generator Loss: 4.7771
+    Epoch 1/2... Discriminator Loss: 0.3890... Generator Loss: 3.8282
 
 
 
 ![png](output_23_13.png)
 
 
-    Epoch 2/2... Discriminator Loss: 0.3684... Generator Loss: 4.4417
-    Epoch 2/2... Discriminator Loss: 1.9355... Generator Loss: 2.1470
-    Epoch 2/2... Discriminator Loss: 1.1147... Generator Loss: 0.8954
-    Epoch 2/2... Discriminator Loss: 1.0721... Generator Loss: 0.8797
-    Epoch 2/2... Discriminator Loss: 0.9526... Generator Loss: 2.1036
-    Epoch 2/2... Discriminator Loss: 1.1211... Generator Loss: 2.9804
-    Epoch 2/2... Discriminator Loss: 0.7303... Generator Loss: 2.9150
-    Epoch 2/2... Discriminator Loss: 0.4167... Generator Loss: 3.5916
-    Epoch 2/2... Discriminator Loss: 0.4143... Generator Loss: 4.2853
-    Epoch 2/2... Discriminator Loss: 0.3731... Generator Loss: 4.5408
+    Epoch 1/2... Discriminator Loss: 0.3546... Generator Loss: 4.8946
+    Epoch 1/2... Discriminator Loss: 0.3813... Generator Loss: 4.0568
+    Epoch 1/2... Discriminator Loss: 0.4180... Generator Loss: 3.5312
+    Epoch 1/2... Discriminator Loss: 0.3796... Generator Loss: 3.6899
+    Epoch 1/2... Discriminator Loss: 0.3417... Generator Loss: 6.1360
+    Epoch 1/2... Discriminator Loss: 0.4190... Generator Loss: 4.2490
+    Epoch 1/2... Discriminator Loss: 0.7814... Generator Loss: 1.7616
+    Epoch 1/2... Discriminator Loss: 0.6529... Generator Loss: 1.7923
+    Epoch 1/2... Discriminator Loss: 1.9452... Generator Loss: 0.3138
+    Epoch 1/2... Discriminator Loss: 3.1307... Generator Loss: 6.5337
 
 
 
 ![png](output_23_15.png)
 
 
-    Epoch 2/2... Discriminator Loss: 0.3910... Generator Loss: 3.9159
-    Epoch 2/2... Discriminator Loss: 0.4179... Generator Loss: 3.7185
-    Epoch 2/2... Discriminator Loss: 2.8947... Generator Loss: 0.4036
-    Epoch 2/2... Discriminator Loss: 0.5240... Generator Loss: 3.9034
-    Epoch 2/2... Discriminator Loss: 0.4936... Generator Loss: 2.6303
-    Epoch 2/2... Discriminator Loss: 0.6345... Generator Loss: 1.7837
-    Epoch 2/2... Discriminator Loss: 2.0412... Generator Loss: 0.2802
-    Epoch 2/2... Discriminator Loss: 1.5294... Generator Loss: 0.4699
-    Epoch 2/2... Discriminator Loss: 1.3075... Generator Loss: 0.6295
-    Epoch 2/2... Discriminator Loss: 0.4208... Generator Loss: 3.4158
+    Epoch 1/2... Discriminator Loss: 1.1457... Generator Loss: 0.8600
+    Epoch 1/2... Discriminator Loss: 1.0381... Generator Loss: 0.9395
+    Epoch 1/2... Discriminator Loss: 0.9353... Generator Loss: 1.3483
+    Epoch 1/2... Discriminator Loss: 1.1974... Generator Loss: 0.7285
+    Epoch 1/2... Discriminator Loss: 0.8211... Generator Loss: 1.4197
+    Epoch 1/2... Discriminator Loss: 0.4267... Generator Loss: 3.5431
+    Epoch 1/2... Discriminator Loss: 0.4890... Generator Loss: 2.9137
+    Epoch 1/2... Discriminator Loss: 0.5052... Generator Loss: 2.6867
+    Epoch 1/2... Discriminator Loss: 0.8103... Generator Loss: 1.6982
+    Epoch 1/2... Discriminator Loss: 0.3705... Generator Loss: 3.9992
 
 
 
 ![png](output_23_17.png)
 
 
-    Epoch 2/2... Discriminator Loss: 0.5323... Generator Loss: 1.9458
-    Epoch 2/2... Discriminator Loss: 0.4567... Generator Loss: 2.3985
-    Epoch 2/2... Discriminator Loss: 0.9555... Generator Loss: 0.9699
-    Epoch 2/2... Discriminator Loss: 0.8081... Generator Loss: 1.6800
-    Epoch 2/2... Discriminator Loss: 0.5114... Generator Loss: 2.3258
-    Epoch 2/2... Discriminator Loss: 0.4673... Generator Loss: 2.3078
-    Epoch 2/2... Discriminator Loss: 1.3339... Generator Loss: 0.5330
-    Epoch 2/2... Discriminator Loss: 0.4813... Generator Loss: 2.2131
-    Epoch 2/2... Discriminator Loss: 0.4486... Generator Loss: 2.4055
-    Epoch 2/2... Discriminator Loss: 1.4540... Generator Loss: 0.6321
+    Epoch 1/2... Discriminator Loss: 0.3407... Generator Loss: 5.6875
+    Epoch 1/2... Discriminator Loss: 0.3382... Generator Loss: 6.5280
+    Epoch 1/2... Discriminator Loss: 0.3348... Generator Loss: 6.1485
+    Epoch 1/2... Discriminator Loss: 0.3761... Generator Loss: 4.1083
+    Epoch 1/2... Discriminator Loss: 0.4692... Generator Loss: 4.1876
+    Epoch 1/2... Discriminator Loss: 2.6886... Generator Loss: 0.2368
+    Epoch 1/2... Discriminator Loss: 1.0609... Generator Loss: 0.8563
+    Epoch 1/2... Discriminator Loss: 0.3855... Generator Loss: 4.3281
+    Epoch 1/2... Discriminator Loss: 0.3904... Generator Loss: 3.5950
+    Epoch 1/2... Discriminator Loss: 0.3732... Generator Loss: 3.9224
 
 
 
 ![png](output_23_19.png)
 
 
-    Epoch 2/2... Discriminator Loss: 2.6707... Generator Loss: 0.1429
-    Epoch 2/2... Discriminator Loss: 0.8888... Generator Loss: 1.0742
-    Epoch 2/2... Discriminator Loss: 1.8030... Generator Loss: 0.3188
-    Epoch 2/2... Discriminator Loss: 0.6668... Generator Loss: 3.5392
-    Epoch 2/2... Discriminator Loss: 1.7560... Generator Loss: 0.3169
-    Epoch 2/2... Discriminator Loss: 0.7312... Generator Loss: 1.4624
+    Epoch 1/2... Discriminator Loss: 0.3824... Generator Loss: 3.4892
+    Epoch 1/2... Discriminator Loss: 0.3867... Generator Loss: 3.6330
+    Epoch 1/2... Discriminator Loss: 0.3943... Generator Loss: 3.3863
+    Epoch 2/2... Discriminator Loss: 0.3965... Generator Loss: 3.0795
+
+
+
+![png](output_23_21.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.7102... Generator Loss: 1.4361
+    Epoch 2/2... Discriminator Loss: 1.0154... Generator Loss: 0.9626
+    Epoch 2/2... Discriminator Loss: 0.7469... Generator Loss: 1.4369
+    Epoch 2/2... Discriminator Loss: 1.1681... Generator Loss: 2.0524
+    Epoch 2/2... Discriminator Loss: 1.1991... Generator Loss: 1.5846
+    Epoch 2/2... Discriminator Loss: 0.8589... Generator Loss: 1.2165
+    Epoch 2/2... Discriminator Loss: 0.7521... Generator Loss: 1.9398
+    Epoch 2/2... Discriminator Loss: 0.7761... Generator Loss: 1.7488
+    Epoch 2/2... Discriminator Loss: 0.8681... Generator Loss: 2.0295
+    Epoch 2/2... Discriminator Loss: 0.5564... Generator Loss: 2.0787
+
+
+
+![png](output_23_23.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.4697... Generator Loss: 2.6957
+    Epoch 2/2... Discriminator Loss: 2.6558... Generator Loss: 0.2100
+    Epoch 2/2... Discriminator Loss: 1.6860... Generator Loss: 4.6695
+    Epoch 2/2... Discriminator Loss: 2.6098... Generator Loss: 0.1531
+    Epoch 2/2... Discriminator Loss: 0.6208... Generator Loss: 1.7633
+    Epoch 2/2... Discriminator Loss: 1.6462... Generator Loss: 0.4267
+    Epoch 2/2... Discriminator Loss: 0.6228... Generator Loss: 1.5984
+    Epoch 2/2... Discriminator Loss: 0.3476... Generator Loss: 4.7067
+    Epoch 2/2... Discriminator Loss: 0.9579... Generator Loss: 5.3597
+    Epoch 2/2... Discriminator Loss: 1.3648... Generator Loss: 0.5318
+
+
+
+![png](output_23_25.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.7040... Generator Loss: 1.6138
+    Epoch 2/2... Discriminator Loss: 1.9659... Generator Loss: 0.3582
+    Epoch 2/2... Discriminator Loss: 0.7640... Generator Loss: 1.7513
+    Epoch 2/2... Discriminator Loss: 0.6450... Generator Loss: 5.3566
+    Epoch 2/2... Discriminator Loss: 0.4613... Generator Loss: 2.2868
+    Epoch 2/2... Discriminator Loss: 0.3765... Generator Loss: 3.7113
+    Epoch 2/2... Discriminator Loss: 0.3927... Generator Loss: 3.1346
+    Epoch 2/2... Discriminator Loss: 0.3984... Generator Loss: 2.9488
+    Epoch 2/2... Discriminator Loss: 0.7527... Generator Loss: 4.2758
+    Epoch 2/2... Discriminator Loss: 0.8651... Generator Loss: 1.1340
+
+
+
+![png](output_23_27.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.7910... Generator Loss: 1.3059
+    Epoch 2/2... Discriminator Loss: 0.5886... Generator Loss: 1.7250
+    Epoch 2/2... Discriminator Loss: 0.4949... Generator Loss: 2.0770
+    Epoch 2/2... Discriminator Loss: 1.6658... Generator Loss: 2.2604
+    Epoch 2/2... Discriminator Loss: 1.0740... Generator Loss: 0.7839
+    Epoch 2/2... Discriminator Loss: 0.4067... Generator Loss: 2.9264
+    Epoch 2/2... Discriminator Loss: 0.4505... Generator Loss: 2.6708
+    Epoch 2/2... Discriminator Loss: 0.4144... Generator Loss: 3.3963
+    Epoch 2/2... Discriminator Loss: 0.4342... Generator Loss: 2.8453
+    Epoch 2/2... Discriminator Loss: 0.3585... Generator Loss: 4.7025
+
+
+
+![png](output_23_29.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.3566... Generator Loss: 6.4329
+    Epoch 2/2... Discriminator Loss: 0.3680... Generator Loss: 3.6437
+    Epoch 2/2... Discriminator Loss: 0.3789... Generator Loss: 3.3137
+    Epoch 2/2... Discriminator Loss: 0.3727... Generator Loss: 3.4362
+    Epoch 2/2... Discriminator Loss: 0.7143... Generator Loss: 1.2806
+    Epoch 2/2... Discriminator Loss: 0.7301... Generator Loss: 1.7697
+    Epoch 2/2... Discriminator Loss: 1.0327... Generator Loss: 0.8601
+    Epoch 2/2... Discriminator Loss: 0.5668... Generator Loss: 1.9329
+    Epoch 2/2... Discriminator Loss: 1.6047... Generator Loss: 0.4591
+    Epoch 2/2... Discriminator Loss: 0.8521... Generator Loss: 1.3014
+
+
+
+![png](output_23_31.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.8380... Generator Loss: 1.5031
+    Epoch 2/2... Discriminator Loss: 0.7686... Generator Loss: 1.1990
+    Epoch 2/2... Discriminator Loss: 0.6808... Generator Loss: 1.8939
+    Epoch 2/2... Discriminator Loss: 0.3634... Generator Loss: 3.9626
+    Epoch 2/2... Discriminator Loss: 0.4074... Generator Loss: 2.8265
+    Epoch 2/2... Discriminator Loss: 0.3841... Generator Loss: 3.2756
+    Epoch 2/2... Discriminator Loss: 1.0557... Generator Loss: 3.5570
+    Epoch 2/2... Discriminator Loss: 0.3721... Generator Loss: 3.9502
+    Epoch 2/2... Discriminator Loss: 0.3895... Generator Loss: 3.4009
+    Epoch 2/2... Discriminator Loss: 0.4426... Generator Loss: 2.4536
+
+
+
+![png](output_23_33.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.4687... Generator Loss: 3.9043
+    Epoch 2/2... Discriminator Loss: 0.3703... Generator Loss: 3.5054
+    Epoch 2/2... Discriminator Loss: 0.4134... Generator Loss: 2.9185
+    Epoch 2/2... Discriminator Loss: 0.3662... Generator Loss: 4.3022
+    Epoch 2/2... Discriminator Loss: 1.0905... Generator Loss: 0.9541
+    Epoch 2/2... Discriminator Loss: 0.7997... Generator Loss: 1.1213
+    Epoch 2/2... Discriminator Loss: 0.4672... Generator Loss: 2.3155
+    Epoch 2/2... Discriminator Loss: 1.3921... Generator Loss: 0.6333
+    Epoch 2/2... Discriminator Loss: 0.8824... Generator Loss: 1.1121
+    Epoch 2/2... Discriminator Loss: 0.8082... Generator Loss: 1.4365
+
+
+
+![png](output_23_35.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.9593... Generator Loss: 0.9929
+    Epoch 2/2... Discriminator Loss: 0.8672... Generator Loss: 1.1660
+    Epoch 2/2... Discriminator Loss: 0.5292... Generator Loss: 1.9798
+    Epoch 2/2... Discriminator Loss: 0.3607... Generator Loss: 4.6074
+    Epoch 2/2... Discriminator Loss: 0.4110... Generator Loss: 2.8145
+    Epoch 2/2... Discriminator Loss: 1.2695... Generator Loss: 2.6994
+    Epoch 2/2... Discriminator Loss: 1.6060... Generator Loss: 0.3972
+    Epoch 2/2... Discriminator Loss: 1.8267... Generator Loss: 3.8771
+    Epoch 2/2... Discriminator Loss: 1.5771... Generator Loss: 0.4395
+    Epoch 2/2... Discriminator Loss: 1.2329... Generator Loss: 3.3491
+
+
+
+![png](output_23_37.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.5673... Generator Loss: 3.4825
+    Epoch 2/2... Discriminator Loss: 1.2626... Generator Loss: 0.6115
+    Epoch 2/2... Discriminator Loss: 0.6627... Generator Loss: 4.9761
+    Epoch 2/2... Discriminator Loss: 1.6572... Generator Loss: 0.4004
+    Epoch 2/2... Discriminator Loss: 0.5135... Generator Loss: 2.3783
+    Epoch 2/2... Discriminator Loss: 0.7756... Generator Loss: 1.3495
+    Epoch 2/2... Discriminator Loss: 0.7779... Generator Loss: 1.2754
+    Epoch 2/2... Discriminator Loss: 0.4645... Generator Loss: 2.7426
+    Epoch 2/2... Discriminator Loss: 0.5808... Generator Loss: 1.6837
+    Epoch 2/2... Discriminator Loss: 1.0099... Generator Loss: 0.8318
+
+
+
+![png](output_23_39.png)
+
+
+    Epoch 2/2... Discriminator Loss: 0.8194... Generator Loss: 1.3862
+    Epoch 2/2... Discriminator Loss: 0.4782... Generator Loss: 2.3555
+    Epoch 2/2... Discriminator Loss: 0.3647... Generator Loss: 3.8309
 
 
 ### CelebA
@@ -605,7 +760,7 @@ Run your GANs on CelebA.  It will take around 20 minutes on the average GPU to r
 
 
 ```python
-batch_size = 128
+batch_size = 64
 z_dim = 120
 learning_rate = 0.001
 beta1 = 0.4
@@ -621,134 +776,515 @@ with tf.Graph().as_default():
           celeba_dataset.shape, celeba_dataset.image_mode)
 ```
 
-    Epoch 1/1... Discriminator Loss: 16.9941... Generator Loss: 0.0000
+    Epoch 1/1... Discriminator Loss: 13.7246... Generator Loss: 0.0000
 
 
 
 ![png](output_25_1.png)
 
 
-    Epoch 1/1... Discriminator Loss: 4.1162... Generator Loss: 0.0350
-    Epoch 1/1... Discriminator Loss: 0.5162... Generator Loss: 2.8422
-    Epoch 1/1... Discriminator Loss: 0.4747... Generator Loss: 3.1210
-    Epoch 1/1... Discriminator Loss: 1.0745... Generator Loss: 0.9649
-    Epoch 1/1... Discriminator Loss: 1.2533... Generator Loss: 3.5242
-    Epoch 1/1... Discriminator Loss: 0.8090... Generator Loss: 1.3331
-    Epoch 1/1... Discriminator Loss: 0.4544... Generator Loss: 3.6281
-    Epoch 1/1... Discriminator Loss: 0.4184... Generator Loss: 3.3658
-    Epoch 1/1... Discriminator Loss: 0.3670... Generator Loss: 8.1484
-    Epoch 1/1... Discriminator Loss: 0.4078... Generator Loss: 3.3341
+    Epoch 1/1... Discriminator Loss: 0.3975... Generator Loss: 4.0804
+    Epoch 1/1... Discriminator Loss: 0.4836... Generator Loss: 9.0739
+    Epoch 1/1... Discriminator Loss: 1.5336... Generator Loss: 12.4028
+    Epoch 1/1... Discriminator Loss: 1.4553... Generator Loss: 0.5844
+    Epoch 1/1... Discriminator Loss: 0.7607... Generator Loss: 1.7192
+    Epoch 1/1... Discriminator Loss: 0.7485... Generator Loss: 1.5387
+    Epoch 1/1... Discriminator Loss: 0.5628... Generator Loss: 2.2553
+    Epoch 1/1... Discriminator Loss: 0.5386... Generator Loss: 2.5217
+    Epoch 1/1... Discriminator Loss: 0.4141... Generator Loss: 3.1790
+    Epoch 1/1... Discriminator Loss: 0.3584... Generator Loss: 4.3951
 
 
 
 ![png](output_25_3.png)
 
 
-    Epoch 1/1... Discriminator Loss: 0.6075... Generator Loss: 2.8589
-    Epoch 1/1... Discriminator Loss: 0.4826... Generator Loss: 2.3719
-    Epoch 1/1... Discriminator Loss: 0.5918... Generator Loss: 2.2987
-    Epoch 1/1... Discriminator Loss: 0.6381... Generator Loss: 2.7862
-    Epoch 1/1... Discriminator Loss: 0.4676... Generator Loss: 2.5488
-    Epoch 1/1... Discriminator Loss: 0.3475... Generator Loss: 6.2478
-    Epoch 1/1... Discriminator Loss: 1.0216... Generator Loss: 1.3938
-    Epoch 1/1... Discriminator Loss: 0.5664... Generator Loss: 1.8657
-    Epoch 1/1... Discriminator Loss: 0.8482... Generator Loss: 1.4416
-    Epoch 1/1... Discriminator Loss: 0.6480... Generator Loss: 1.8466
+    Epoch 1/1... Discriminator Loss: 0.3467... Generator Loss: 5.2537
+    Epoch 1/1... Discriminator Loss: 0.3807... Generator Loss: 4.2883
+    Epoch 1/1... Discriminator Loss: 0.3635... Generator Loss: 4.3178
+    Epoch 1/1... Discriminator Loss: 0.3766... Generator Loss: 5.3173
+    Epoch 1/1... Discriminator Loss: 1.4937... Generator Loss: 3.9523
+    Epoch 1/1... Discriminator Loss: 0.5362... Generator Loss: 2.1614
+    Epoch 1/1... Discriminator Loss: 0.4395... Generator Loss: 2.5971
+    Epoch 1/1... Discriminator Loss: 0.3507... Generator Loss: 4.5753
+    Epoch 1/1... Discriminator Loss: 0.4410... Generator Loss: 2.5656
+    Epoch 1/1... Discriminator Loss: 5.2560... Generator Loss: 5.9320
 
 
 
 ![png](output_25_5.png)
 
 
-    Epoch 1/1... Discriminator Loss: 2.2491... Generator Loss: 0.2642
-    Epoch 1/1... Discriminator Loss: 0.7588... Generator Loss: 1.3423
-    Epoch 1/1... Discriminator Loss: 0.5766... Generator Loss: 3.1370
-    Epoch 1/1... Discriminator Loss: 1.9425... Generator Loss: 0.4048
-    Epoch 1/1... Discriminator Loss: 1.1857... Generator Loss: 0.9992
-    Epoch 1/1... Discriminator Loss: 1.5598... Generator Loss: 0.7427
-    Epoch 1/1... Discriminator Loss: 1.2919... Generator Loss: 1.2880
-    Epoch 1/1... Discriminator Loss: 1.3161... Generator Loss: 2.0889
-    Epoch 1/1... Discriminator Loss: 0.5954... Generator Loss: 2.0027
-    Epoch 1/1... Discriminator Loss: 0.8830... Generator Loss: 1.2181
+    Epoch 1/1... Discriminator Loss: 1.1262... Generator Loss: 1.0162
+    Epoch 1/1... Discriminator Loss: 1.0042... Generator Loss: 1.3377
+    Epoch 1/1... Discriminator Loss: 0.6864... Generator Loss: 1.5250
+    Epoch 1/1... Discriminator Loss: 0.5122... Generator Loss: 2.1933
+    Epoch 1/1... Discriminator Loss: 1.0660... Generator Loss: 1.2083
+    Epoch 1/1... Discriminator Loss: 0.5101... Generator Loss: 2.1443
+    Epoch 1/1... Discriminator Loss: 0.6313... Generator Loss: 3.0828
+    Epoch 1/1... Discriminator Loss: 0.9788... Generator Loss: 1.2979
+    Epoch 1/1... Discriminator Loss: 1.1701... Generator Loss: 0.7353
+    Epoch 1/1... Discriminator Loss: 0.5878... Generator Loss: 2.5366
 
 
 
 ![png](output_25_7.png)
 
 
-    Epoch 1/1... Discriminator Loss: 0.5983... Generator Loss: 1.9686
-    Epoch 1/1... Discriminator Loss: 3.3128... Generator Loss: 7.1442
-    Epoch 1/1... Discriminator Loss: 0.5201... Generator Loss: 2.1857
-    Epoch 1/1... Discriminator Loss: 0.9608... Generator Loss: 1.5807
-    Epoch 1/1... Discriminator Loss: 5.2778... Generator Loss: 2.8808
-    Epoch 1/1... Discriminator Loss: 1.2259... Generator Loss: 1.0814
-    Epoch 1/1... Discriminator Loss: 1.0846... Generator Loss: 1.0706
-    Epoch 1/1... Discriminator Loss: 1.2432... Generator Loss: 1.0470
-    Epoch 1/1... Discriminator Loss: 0.9312... Generator Loss: 1.2703
-    Epoch 1/1... Discriminator Loss: 0.4814... Generator Loss: 2.8450
+    Epoch 1/1... Discriminator Loss: 0.8021... Generator Loss: 1.6639
+    Epoch 1/1... Discriminator Loss: 0.4430... Generator Loss: 2.8232
+    Epoch 1/1... Discriminator Loss: 0.6600... Generator Loss: 3.9759
+    Epoch 1/1... Discriminator Loss: 0.6854... Generator Loss: 2.1940
+    Epoch 1/1... Discriminator Loss: 1.1392... Generator Loss: 1.3513
+    Epoch 1/1... Discriminator Loss: 1.1242... Generator Loss: 1.0847
+    Epoch 1/1... Discriminator Loss: 0.5706... Generator Loss: 2.3021
+    Epoch 1/1... Discriminator Loss: 0.6076... Generator Loss: 2.4784
+    Epoch 1/1... Discriminator Loss: 0.5251... Generator Loss: 2.6012
+    Epoch 1/1... Discriminator Loss: 1.9944... Generator Loss: 0.5967
 
 
 
 ![png](output_25_9.png)
 
 
-    Epoch 1/1... Discriminator Loss: 0.4566... Generator Loss: 3.3208
-    Epoch 1/1... Discriminator Loss: 1.4454... Generator Loss: 1.1703
-    Epoch 1/1... Discriminator Loss: 0.9391... Generator Loss: 1.4574
-    Epoch 1/1... Discriminator Loss: 0.9250... Generator Loss: 1.2871
-    Epoch 1/1... Discriminator Loss: 0.7125... Generator Loss: 1.6204
-    Epoch 1/1... Discriminator Loss: 1.1140... Generator Loss: 4.0918
-    Epoch 1/1... Discriminator Loss: 1.0832... Generator Loss: 1.2038
-    Epoch 1/1... Discriminator Loss: 0.8608... Generator Loss: 2.3076
-    Epoch 1/1... Discriminator Loss: 0.4794... Generator Loss: 2.3596
-    Epoch 1/1... Discriminator Loss: 0.4563... Generator Loss: 3.5339
+    Epoch 1/1... Discriminator Loss: 1.2998... Generator Loss: 0.7238
+    Epoch 1/1... Discriminator Loss: 0.8881... Generator Loss: 1.6217
+    Epoch 1/1... Discriminator Loss: 0.7153... Generator Loss: 1.5175
+    Epoch 1/1... Discriminator Loss: 0.4849... Generator Loss: 2.9011
+    Epoch 1/1... Discriminator Loss: 0.4758... Generator Loss: 2.6352
+    Epoch 1/1... Discriminator Loss: 0.5173... Generator Loss: 3.8355
+    Epoch 1/1... Discriminator Loss: 0.5340... Generator Loss: 2.9157
+    Epoch 1/1... Discriminator Loss: 0.4626... Generator Loss: 2.8922
+    Epoch 1/1... Discriminator Loss: 0.4981... Generator Loss: 2.9757
+    Epoch 1/1... Discriminator Loss: 0.6853... Generator Loss: 2.0953
 
 
 
 ![png](output_25_11.png)
 
 
-    Epoch 1/1... Discriminator Loss: 1.0030... Generator Loss: 1.1396
-    Epoch 1/1... Discriminator Loss: 0.7648... Generator Loss: 2.0937
-    Epoch 1/1... Discriminator Loss: 0.4759... Generator Loss: 2.5067
-    Epoch 1/1... Discriminator Loss: 0.5335... Generator Loss: 2.1120
-    Epoch 1/1... Discriminator Loss: 0.4425... Generator Loss: 2.9939
-    Epoch 1/1... Discriminator Loss: 0.5095... Generator Loss: 3.4753
-    Epoch 1/1... Discriminator Loss: 0.5195... Generator Loss: 2.1756
-    Epoch 1/1... Discriminator Loss: 0.5305... Generator Loss: 2.6773
-    Epoch 1/1... Discriminator Loss: 0.4184... Generator Loss: 3.5996
-    Epoch 1/1... Discriminator Loss: 0.9422... Generator Loss: 2.3405
+    Epoch 1/1... Discriminator Loss: 0.9247... Generator Loss: 1.7848
+    Epoch 1/1... Discriminator Loss: 1.2026... Generator Loss: 1.5001
+    Epoch 1/1... Discriminator Loss: 1.7269... Generator Loss: 1.9636
+    Epoch 1/1... Discriminator Loss: 0.6073... Generator Loss: 2.4368
+    Epoch 1/1... Discriminator Loss: 0.4852... Generator Loss: 2.7439
+    Epoch 1/1... Discriminator Loss: 0.4761... Generator Loss: 2.5932
+    Epoch 1/1... Discriminator Loss: 0.6192... Generator Loss: 1.8697
+    Epoch 1/1... Discriminator Loss: 0.5686... Generator Loss: 2.1129
+    Epoch 1/1... Discriminator Loss: 0.5179... Generator Loss: 2.5017
+    Epoch 1/1... Discriminator Loss: 0.4137... Generator Loss: 3.3054
 
 
 
 ![png](output_25_13.png)
 
 
-    Epoch 1/1... Discriminator Loss: 1.0512... Generator Loss: 3.3225
-    Epoch 1/1... Discriminator Loss: 0.4752... Generator Loss: 2.5340
-    Epoch 1/1... Discriminator Loss: 0.4263... Generator Loss: 3.2993
-    Epoch 1/1... Discriminator Loss: 0.4512... Generator Loss: 2.8712
-    Epoch 1/1... Discriminator Loss: 0.3626... Generator Loss: 4.7991
-    Epoch 1/1... Discriminator Loss: 1.1171... Generator Loss: 1.0248
-    Epoch 1/1... Discriminator Loss: 0.4038... Generator Loss: 3.7627
-    Epoch 1/1... Discriminator Loss: 0.3863... Generator Loss: 3.9757
-    Epoch 1/1... Discriminator Loss: 0.4133... Generator Loss: 3.2886
-    Epoch 1/1... Discriminator Loss: 0.4156... Generator Loss: 3.1933
+    Epoch 1/1... Discriminator Loss: 2.0833... Generator Loss: 1.8718
+    Epoch 1/1... Discriminator Loss: 1.2300... Generator Loss: 0.8037
+    Epoch 1/1... Discriminator Loss: 0.4660... Generator Loss: 2.9256
+    Epoch 1/1... Discriminator Loss: 0.5504... Generator Loss: 2.3096
+    Epoch 1/1... Discriminator Loss: 0.5024... Generator Loss: 3.0296
+    Epoch 1/1... Discriminator Loss: 0.9833... Generator Loss: 1.0941
+    Epoch 1/1... Discriminator Loss: 0.4380... Generator Loss: 3.1803
+    Epoch 1/1... Discriminator Loss: 0.4382... Generator Loss: 3.0106
+    Epoch 1/1... Discriminator Loss: 0.4400... Generator Loss: 3.0951
+    Epoch 1/1... Discriminator Loss: 1.1747... Generator Loss: 1.0800
 
 
 
 ![png](output_25_15.png)
 
 
-    Epoch 1/1... Discriminator Loss: 0.3760... Generator Loss: 4.7054
-    Epoch 1/1... Discriminator Loss: 0.9805... Generator Loss: 4.1193
-    Epoch 1/1... Discriminator Loss: 0.4106... Generator Loss: 3.0476
-    Epoch 1/1... Discriminator Loss: 0.5004... Generator Loss: 2.2198
-    Epoch 1/1... Discriminator Loss: 0.3734... Generator Loss: 4.3040
-    Epoch 1/1... Discriminator Loss: 1.7771... Generator Loss: 7.0367
-    Epoch 1/1... Discriminator Loss: 1.4334... Generator Loss: 1.6699
-    Epoch 1/1... Discriminator Loss: 1.0360... Generator Loss: 1.1726
-    Epoch 1/1... Discriminator Loss: 0.5911... Generator Loss: 2.1622
+    Epoch 1/1... Discriminator Loss: 0.7657... Generator Loss: 1.3459
+    Epoch 1/1... Discriminator Loss: 1.1314... Generator Loss: 1.0722
+    Epoch 1/1... Discriminator Loss: 0.4391... Generator Loss: 2.9809
+    Epoch 1/1... Discriminator Loss: 0.4053... Generator Loss: 3.3322
+    Epoch 1/1... Discriminator Loss: 0.3595... Generator Loss: 4.1438
+    Epoch 1/1... Discriminator Loss: 0.3778... Generator Loss: 3.6243
+    Epoch 1/1... Discriminator Loss: 0.3549... Generator Loss: 4.1163
+    Epoch 1/1... Discriminator Loss: 0.3535... Generator Loss: 4.6220
+    Epoch 1/1... Discriminator Loss: 0.3720... Generator Loss: 3.8848
+    Epoch 1/1... Discriminator Loss: 0.5589... Generator Loss: 3.9312
+
+
+
+![png](output_25_17.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.6448... Generator Loss: 1.0767
+    Epoch 1/1... Discriminator Loss: 1.5965... Generator Loss: 0.5917
+    Epoch 1/1... Discriminator Loss: 1.2040... Generator Loss: 0.7964
+    Epoch 1/1... Discriminator Loss: 1.4271... Generator Loss: 0.9690
+    Epoch 1/1... Discriminator Loss: 1.3684... Generator Loss: 1.2469
+    Epoch 1/1... Discriminator Loss: 1.2638... Generator Loss: 0.6827
+    Epoch 1/1... Discriminator Loss: 0.5924... Generator Loss: 2.1739
+    Epoch 1/1... Discriminator Loss: 0.5004... Generator Loss: 2.4822
+    Epoch 1/1... Discriminator Loss: 0.6612... Generator Loss: 1.6425
+    Epoch 1/1... Discriminator Loss: 0.3934... Generator Loss: 3.4260
+
+
+
+![png](output_25_19.png)
+
+
+    Epoch 1/1... Discriminator Loss: 0.4253... Generator Loss: 2.7770
+    Epoch 1/1... Discriminator Loss: 0.3681... Generator Loss: 3.7646
+    Epoch 1/1... Discriminator Loss: 0.3940... Generator Loss: 3.4507
+    Epoch 1/1... Discriminator Loss: 0.4109... Generator Loss: 3.1662
+    Epoch 1/1... Discriminator Loss: 0.4237... Generator Loss: 3.0965
+    Epoch 1/1... Discriminator Loss: 0.3743... Generator Loss: 3.8695
+    Epoch 1/1... Discriminator Loss: 1.1328... Generator Loss: 5.9892
+    Epoch 1/1... Discriminator Loss: 1.5652... Generator Loss: 0.5479
+    Epoch 1/1... Discriminator Loss: 0.4021... Generator Loss: 3.4702
+    Epoch 1/1... Discriminator Loss: 2.0572... Generator Loss: 5.4887
+
+
+
+![png](output_25_21.png)
+
+
+    Epoch 1/1... Discriminator Loss: 0.4445... Generator Loss: 2.6965
+    Epoch 1/1... Discriminator Loss: 0.6694... Generator Loss: 1.4297
+    Epoch 1/1... Discriminator Loss: 0.8867... Generator Loss: 1.4612
+    Epoch 1/1... Discriminator Loss: 0.6412... Generator Loss: 1.6863
+    Epoch 1/1... Discriminator Loss: 0.4174... Generator Loss: 2.7857
+    Epoch 1/1... Discriminator Loss: 0.3487... Generator Loss: 4.7380
+    Epoch 1/1... Discriminator Loss: 0.4969... Generator Loss: 2.1899
+    Epoch 1/1... Discriminator Loss: 0.6704... Generator Loss: 1.8743
+    Epoch 1/1... Discriminator Loss: 0.4206... Generator Loss: 3.2733
+    Epoch 1/1... Discriminator Loss: 0.8094... Generator Loss: 1.8970
+
+
+
+![png](output_25_23.png)
+
+
+    Epoch 1/1... Discriminator Loss: 0.8296... Generator Loss: 1.1512
+    Epoch 1/1... Discriminator Loss: 1.3095... Generator Loss: 0.9285
+    Epoch 1/1... Discriminator Loss: 0.8082... Generator Loss: 1.2755
+    Epoch 1/1... Discriminator Loss: 1.3646... Generator Loss: 0.7275
+    Epoch 1/1... Discriminator Loss: 1.2186... Generator Loss: 0.7154
+    Epoch 1/1... Discriminator Loss: 0.4947... Generator Loss: 2.4466
+    Epoch 1/1... Discriminator Loss: 1.5349... Generator Loss: 2.5178
+    Epoch 1/1... Discriminator Loss: 1.0302... Generator Loss: 0.8427
+    Epoch 1/1... Discriminator Loss: 1.8944... Generator Loss: 2.7738
+    Epoch 1/1... Discriminator Loss: 1.5230... Generator Loss: 0.7447
+
+
+
+![png](output_25_25.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.3227... Generator Loss: 1.0118
+    Epoch 1/1... Discriminator Loss: 1.6730... Generator Loss: 1.0269
+    Epoch 1/1... Discriminator Loss: 1.3612... Generator Loss: 0.7497
+    Epoch 1/1... Discriminator Loss: 1.5373... Generator Loss: 0.6484
+    Epoch 1/1... Discriminator Loss: 1.5664... Generator Loss: 1.2453
+    Epoch 1/1... Discriminator Loss: 0.7711... Generator Loss: 1.1269
+    Epoch 1/1... Discriminator Loss: 1.5339... Generator Loss: 0.6281
+    Epoch 1/1... Discriminator Loss: 1.5210... Generator Loss: 0.6070
+    Epoch 1/1... Discriminator Loss: 1.8391... Generator Loss: 1.8914
+    Epoch 1/1... Discriminator Loss: 0.9271... Generator Loss: 1.0243
+
+
+
+![png](output_25_27.png)
+
+
+    Epoch 1/1... Discriminator Loss: 0.6590... Generator Loss: 1.6298
+    Epoch 1/1... Discriminator Loss: 2.5617... Generator Loss: 2.4168
+    Epoch 1/1... Discriminator Loss: 1.4181... Generator Loss: 1.0394
+    Epoch 1/1... Discriminator Loss: 1.4339... Generator Loss: 0.8746
+    Epoch 1/1... Discriminator Loss: 1.3474... Generator Loss: 0.8953
+    Epoch 1/1... Discriminator Loss: 1.3461... Generator Loss: 0.8158
+    Epoch 1/1... Discriminator Loss: 1.0742... Generator Loss: 1.0728
+    Epoch 1/1... Discriminator Loss: 1.1666... Generator Loss: 1.0570
+    Epoch 1/1... Discriminator Loss: 1.3673... Generator Loss: 0.8484
+    Epoch 1/1... Discriminator Loss: 0.6475... Generator Loss: 1.4217
+
+
+
+![png](output_25_29.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.1590... Generator Loss: 0.9411
+    Epoch 1/1... Discriminator Loss: 1.7640... Generator Loss: 0.3311
+    Epoch 1/1... Discriminator Loss: 1.2938... Generator Loss: 0.7957
+    Epoch 1/1... Discriminator Loss: 1.4191... Generator Loss: 1.0557
+    Epoch 1/1... Discriminator Loss: 2.4914... Generator Loss: 2.2611
+    Epoch 1/1... Discriminator Loss: 1.3970... Generator Loss: 0.5869
+    Epoch 1/1... Discriminator Loss: 1.3769... Generator Loss: 0.8805
+    Epoch 1/1... Discriminator Loss: 1.4859... Generator Loss: 0.5404
+    Epoch 1/1... Discriminator Loss: 1.3831... Generator Loss: 0.8281
+    Epoch 1/1... Discriminator Loss: 1.4249... Generator Loss: 0.6900
+
+
+
+![png](output_25_31.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.3177... Generator Loss: 0.7830
+    Epoch 1/1... Discriminator Loss: 1.7148... Generator Loss: 1.3697
+    Epoch 1/1... Discriminator Loss: 1.4495... Generator Loss: 0.8027
+    Epoch 1/1... Discriminator Loss: 1.6342... Generator Loss: 0.4576
+    Epoch 1/1... Discriminator Loss: 1.3941... Generator Loss: 0.7170
+    Epoch 1/1... Discriminator Loss: 1.3292... Generator Loss: 0.8115
+    Epoch 1/1... Discriminator Loss: 1.2929... Generator Loss: 0.7842
+    Epoch 1/1... Discriminator Loss: 1.4054... Generator Loss: 1.0875
+    Epoch 1/1... Discriminator Loss: 1.4350... Generator Loss: 0.6786
+    Epoch 1/1... Discriminator Loss: 1.4073... Generator Loss: 0.5707
+
+
+
+![png](output_25_33.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.3277... Generator Loss: 0.6824
+    Epoch 1/1... Discriminator Loss: 1.4104... Generator Loss: 0.7367
+    Epoch 1/1... Discriminator Loss: 1.4443... Generator Loss: 1.0594
+    Epoch 1/1... Discriminator Loss: 1.3708... Generator Loss: 1.0247
+    Epoch 1/1... Discriminator Loss: 1.3159... Generator Loss: 0.9552
+    Epoch 1/1... Discriminator Loss: 1.3308... Generator Loss: 0.7640
+    Epoch 1/1... Discriminator Loss: 1.3164... Generator Loss: 0.8323
+    Epoch 1/1... Discriminator Loss: 1.2851... Generator Loss: 0.7759
+    Epoch 1/1... Discriminator Loss: 1.4558... Generator Loss: 0.6862
+    Epoch 1/1... Discriminator Loss: 1.3115... Generator Loss: 0.7754
+
+
+
+![png](output_25_35.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.3996... Generator Loss: 0.7515
+    Epoch 1/1... Discriminator Loss: 1.2989... Generator Loss: 0.7904
+    Epoch 1/1... Discriminator Loss: 1.4003... Generator Loss: 0.6941
+    Epoch 1/1... Discriminator Loss: 1.3711... Generator Loss: 0.6374
+    Epoch 1/1... Discriminator Loss: 1.7957... Generator Loss: 0.2842
+    Epoch 1/1... Discriminator Loss: 1.4021... Generator Loss: 0.6887
+    Epoch 1/1... Discriminator Loss: 1.3640... Generator Loss: 1.1022
+    Epoch 1/1... Discriminator Loss: 1.4156... Generator Loss: 0.7996
+    Epoch 1/1... Discriminator Loss: 1.4314... Generator Loss: 0.5935
+    Epoch 1/1... Discriminator Loss: 1.3046... Generator Loss: 0.7074
+
+
+
+![png](output_25_37.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.3023... Generator Loss: 0.7232
+    Epoch 1/1... Discriminator Loss: 1.3239... Generator Loss: 0.8081
+    Epoch 1/1... Discriminator Loss: 1.3473... Generator Loss: 0.9262
+    Epoch 1/1... Discriminator Loss: 1.4029... Generator Loss: 0.7481
+    Epoch 1/1... Discriminator Loss: 1.5371... Generator Loss: 1.0831
+    Epoch 1/1... Discriminator Loss: 1.4145... Generator Loss: 0.6180
+    Epoch 1/1... Discriminator Loss: 1.4197... Generator Loss: 0.5554
+    Epoch 1/1... Discriminator Loss: 1.2850... Generator Loss: 1.1518
+    Epoch 1/1... Discriminator Loss: 1.3903... Generator Loss: 0.6719
+    Epoch 1/1... Discriminator Loss: 1.3561... Generator Loss: 0.7454
+
+
+
+![png](output_25_39.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.3849... Generator Loss: 0.6383
+    Epoch 1/1... Discriminator Loss: 1.5044... Generator Loss: 0.7066
+    Epoch 1/1... Discriminator Loss: 1.4058... Generator Loss: 0.7160
+    Epoch 1/1... Discriminator Loss: 1.4895... Generator Loss: 0.8953
+    Epoch 1/1... Discriminator Loss: 1.2532... Generator Loss: 0.7604
+    Epoch 1/1... Discriminator Loss: 1.3594... Generator Loss: 0.6772
+    Epoch 1/1... Discriminator Loss: 1.4080... Generator Loss: 0.6612
+    Epoch 1/1... Discriminator Loss: 1.3788... Generator Loss: 0.7451
+    Epoch 1/1... Discriminator Loss: 1.3906... Generator Loss: 0.6721
+    Epoch 1/1... Discriminator Loss: 1.2672... Generator Loss: 0.6731
+
+
+
+![png](output_25_41.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.5872... Generator Loss: 2.4487
+    Epoch 1/1... Discriminator Loss: 1.4056... Generator Loss: 0.6800
+    Epoch 1/1... Discriminator Loss: 1.2382... Generator Loss: 0.7809
+    Epoch 1/1... Discriminator Loss: 1.6078... Generator Loss: 0.5185
+    Epoch 1/1... Discriminator Loss: 1.4061... Generator Loss: 0.7502
+    Epoch 1/1... Discriminator Loss: 1.3807... Generator Loss: 0.8876
+    Epoch 1/1... Discriminator Loss: 1.4040... Generator Loss: 0.6530
+    Epoch 1/1... Discriminator Loss: 1.3848... Generator Loss: 0.9872
+    Epoch 1/1... Discriminator Loss: 1.3868... Generator Loss: 0.6882
+    Epoch 1/1... Discriminator Loss: 1.4353... Generator Loss: 0.5861
+
+
+
+![png](output_25_43.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.3311... Generator Loss: 0.8892
+    Epoch 1/1... Discriminator Loss: 1.3449... Generator Loss: 0.7776
+    Epoch 1/1... Discriminator Loss: 1.3341... Generator Loss: 0.7152
+    Epoch 1/1... Discriminator Loss: 1.4341... Generator Loss: 0.6858
+    Epoch 1/1... Discriminator Loss: 1.3193... Generator Loss: 0.7167
+    Epoch 1/1... Discriminator Loss: 1.5055... Generator Loss: 0.8548
+    Epoch 1/1... Discriminator Loss: 1.6396... Generator Loss: 0.4481
+    Epoch 1/1... Discriminator Loss: 1.4964... Generator Loss: 0.9694
+    Epoch 1/1... Discriminator Loss: 1.4634... Generator Loss: 0.5703
+    Epoch 1/1... Discriminator Loss: 1.3340... Generator Loss: 1.0783
+
+
+
+![png](output_25_45.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.3565... Generator Loss: 1.0098
+    Epoch 1/1... Discriminator Loss: 1.3859... Generator Loss: 0.6218
+    Epoch 1/1... Discriminator Loss: 1.4569... Generator Loss: 0.5508
+    Epoch 1/1... Discriminator Loss: 1.3849... Generator Loss: 0.6666
+    Epoch 1/1... Discriminator Loss: 1.5394... Generator Loss: 0.4425
+    Epoch 1/1... Discriminator Loss: 1.4374... Generator Loss: 0.7031
+    Epoch 1/1... Discriminator Loss: 1.4407... Generator Loss: 0.5981
+    Epoch 1/1... Discriminator Loss: 1.4426... Generator Loss: 0.8872
+    Epoch 1/1... Discriminator Loss: 1.4109... Generator Loss: 0.7128
+    Epoch 1/1... Discriminator Loss: 1.4740... Generator Loss: 0.5887
+
+
+
+![png](output_25_47.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.2809... Generator Loss: 0.7002
+    Epoch 1/1... Discriminator Loss: 1.0522... Generator Loss: 1.4258
+    Epoch 1/1... Discriminator Loss: 1.3225... Generator Loss: 0.9868
+    Epoch 1/1... Discriminator Loss: 1.3521... Generator Loss: 0.6459
+    Epoch 1/1... Discriminator Loss: 1.4797... Generator Loss: 0.6133
+    Epoch 1/1... Discriminator Loss: 1.5136... Generator Loss: 0.6683
+    Epoch 1/1... Discriminator Loss: 1.2711... Generator Loss: 0.6762
+    Epoch 1/1... Discriminator Loss: 1.3884... Generator Loss: 0.6393
+    Epoch 1/1... Discriminator Loss: 1.3961... Generator Loss: 0.5566
+    Epoch 1/1... Discriminator Loss: 1.3218... Generator Loss: 0.8719
+
+
+
+![png](output_25_49.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.5045... Generator Loss: 0.5211
+    Epoch 1/1... Discriminator Loss: 1.5619... Generator Loss: 0.4691
+    Epoch 1/1... Discriminator Loss: 1.4679... Generator Loss: 0.7805
+    Epoch 1/1... Discriminator Loss: 1.3021... Generator Loss: 0.7755
+    Epoch 1/1... Discriminator Loss: 1.2914... Generator Loss: 0.8280
+    Epoch 1/1... Discriminator Loss: 1.4017... Generator Loss: 0.8661
+    Epoch 1/1... Discriminator Loss: 1.4401... Generator Loss: 0.9641
+    Epoch 1/1... Discriminator Loss: 1.3937... Generator Loss: 0.5562
+    Epoch 1/1... Discriminator Loss: 1.3495... Generator Loss: 0.8116
+    Epoch 1/1... Discriminator Loss: 1.3305... Generator Loss: 0.8295
+
+
+
+![png](output_25_51.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.2541... Generator Loss: 0.7881
+    Epoch 1/1... Discriminator Loss: 1.2946... Generator Loss: 0.9757
+    Epoch 1/1... Discriminator Loss: 1.3008... Generator Loss: 0.6800
+    Epoch 1/1... Discriminator Loss: 1.3899... Generator Loss: 0.8027
+    Epoch 1/1... Discriminator Loss: 1.3982... Generator Loss: 1.2151
+    Epoch 1/1... Discriminator Loss: 1.2971... Generator Loss: 0.9401
+    Epoch 1/1... Discriminator Loss: 1.2729... Generator Loss: 0.7863
+    Epoch 1/1... Discriminator Loss: 1.3683... Generator Loss: 0.7594
+    Epoch 1/1... Discriminator Loss: 1.5350... Generator Loss: 0.4779
+    Epoch 1/1... Discriminator Loss: 1.4141... Generator Loss: 0.9836
+
+
+
+![png](output_25_53.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.4720... Generator Loss: 1.3472
+    Epoch 1/1... Discriminator Loss: 1.4169... Generator Loss: 0.5928
+    Epoch 1/1... Discriminator Loss: 0.9334... Generator Loss: 1.1048
+    Epoch 1/1... Discriminator Loss: 1.3140... Generator Loss: 0.9040
+    Epoch 1/1... Discriminator Loss: 1.3666... Generator Loss: 0.7416
+    Epoch 1/1... Discriminator Loss: 1.3490... Generator Loss: 0.8601
+    Epoch 1/1... Discriminator Loss: 1.4001... Generator Loss: 0.7884
+    Epoch 1/1... Discriminator Loss: 1.3599... Generator Loss: 0.6742
+    Epoch 1/1... Discriminator Loss: 1.1158... Generator Loss: 0.9899
+    Epoch 1/1... Discriminator Loss: 1.3575... Generator Loss: 0.8070
+
+
+
+![png](output_25_55.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.2877... Generator Loss: 0.7687
+    Epoch 1/1... Discriminator Loss: 1.1327... Generator Loss: 1.0111
+    Epoch 1/1... Discriminator Loss: 1.5179... Generator Loss: 1.9638
+    Epoch 1/1... Discriminator Loss: 1.0450... Generator Loss: 1.0810
+    Epoch 1/1... Discriminator Loss: 1.4708... Generator Loss: 0.4909
+    Epoch 1/1... Discriminator Loss: 1.7596... Generator Loss: 0.4636
+    Epoch 1/1... Discriminator Loss: 1.3064... Generator Loss: 0.9600
+    Epoch 1/1... Discriminator Loss: 1.2306... Generator Loss: 0.9916
+    Epoch 1/1... Discriminator Loss: 1.2843... Generator Loss: 0.7572
+    Epoch 1/1... Discriminator Loss: 1.4496... Generator Loss: 0.6396
+
+
+
+![png](output_25_57.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.2848... Generator Loss: 0.7351
+    Epoch 1/1... Discriminator Loss: 1.3657... Generator Loss: 0.6483
+    Epoch 1/1... Discriminator Loss: 1.2319... Generator Loss: 0.8336
+    Epoch 1/1... Discriminator Loss: 1.1727... Generator Loss: 1.0331
+    Epoch 1/1... Discriminator Loss: 1.3775... Generator Loss: 0.5121
+    Epoch 1/1... Discriminator Loss: 1.3599... Generator Loss: 0.7936
+    Epoch 1/1... Discriminator Loss: 1.7481... Generator Loss: 0.3069
+    Epoch 1/1... Discriminator Loss: 1.4313... Generator Loss: 0.7208
+    Epoch 1/1... Discriminator Loss: 1.2835... Generator Loss: 0.8172
+    Epoch 1/1... Discriminator Loss: 1.4639... Generator Loss: 0.5734
+
+
+
+![png](output_25_59.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.2742... Generator Loss: 0.8995
+    Epoch 1/1... Discriminator Loss: 1.4796... Generator Loss: 0.7230
+    Epoch 1/1... Discriminator Loss: 1.2842... Generator Loss: 0.8166
+    Epoch 1/1... Discriminator Loss: 1.3418... Generator Loss: 0.6955
+    Epoch 1/1... Discriminator Loss: 1.2564... Generator Loss: 0.8759
+    Epoch 1/1... Discriminator Loss: 1.3688... Generator Loss: 0.7182
+    Epoch 1/1... Discriminator Loss: 1.3703... Generator Loss: 0.8322
+    Epoch 1/1... Discriminator Loss: 1.3967... Generator Loss: 0.8504
+    Epoch 1/1... Discriminator Loss: 1.3535... Generator Loss: 0.6189
+    Epoch 1/1... Discriminator Loss: 1.4143... Generator Loss: 0.7675
+
+
+
+![png](output_25_61.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.4153... Generator Loss: 0.6599
+    Epoch 1/1... Discriminator Loss: 1.3275... Generator Loss: 0.7447
+    Epoch 1/1... Discriminator Loss: 1.3195... Generator Loss: 0.6718
+    Epoch 1/1... Discriminator Loss: 1.3576... Generator Loss: 0.6470
+    Epoch 1/1... Discriminator Loss: 1.3823... Generator Loss: 1.3967
+    Epoch 1/1... Discriminator Loss: 1.5001... Generator Loss: 0.5320
+    Epoch 1/1... Discriminator Loss: 1.3016... Generator Loss: 0.7442
+    Epoch 1/1... Discriminator Loss: 1.4328... Generator Loss: 0.7104
+    Epoch 1/1... Discriminator Loss: 1.6319... Generator Loss: 0.5951
+    Epoch 1/1... Discriminator Loss: 1.3499... Generator Loss: 0.7628
+
+
+
+![png](output_25_63.png)
+
+
+    Epoch 1/1... Discriminator Loss: 1.4347... Generator Loss: 0.6995
+    Epoch 1/1... Discriminator Loss: 1.4835... Generator Loss: 0.8274
+    Epoch 1/1... Discriminator Loss: 1.4329... Generator Loss: 0.5246
+    Epoch 1/1... Discriminator Loss: 1.4805... Generator Loss: 0.5603
+    Epoch 1/1... Discriminator Loss: 1.3067... Generator Loss: 0.8621
+    Epoch 1/1... Discriminator Loss: 1.5229... Generator Loss: 0.5196
 
 
 ### Submitting This Project
